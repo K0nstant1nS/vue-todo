@@ -1,11 +1,11 @@
 <template>
   <li v-if="isEditing" class="todo">
-    <input v-model="editingText"/>
+    <input class="create-input" v-model="editingText"/>
       <TodoControllButton additional-class="todo__controll-button-to-edit_type_absolute" :img-src="saveImage" size="small" v-if="editingText" :on-click="postTodo"></TodoControllButton>
       <TodoControllButton additional-class="todo__controll-button-to-remove_type_absolute" :on-click="stopEditing" :img-src="closeImage"></TodoControllButton>
     </li>
-  <li v-else class="todo">
-    <p class="todo__paragraph"><span class="index">{{ todo.index }}</span> <span class="text">{{ todo.text }}</span></p>
+  <li v-else class="todo" :key="todo.index">
+    <p class="todo__paragraph"><input @change="changeIndex" class="index" type="text" v-model="index"> <span class="text">{{ todo.text }}</span></p>
     <div class="todo__controll">
       <TodoControllButton :on-click="editTodo" :img-src="editImage"></TodoControllButton>
       <TodoControllButton :on-click="removeTodo" :img-src="removeImage"></TodoControllButton>
@@ -21,14 +21,17 @@ import removeImage from "../imgs/icons8-remove-30.png"
 import saveImage from "../imgs/icons8-save-30.png"
 import closeImage from "../imgs/icons8-close-30.png"
 import store from '../store/index';
-const isEditing = ref(false)
-const editingText = ref("")
+
 const props = defineProps<{
   todo: {
     index: number,
     text: string
   }
 }>()
+
+const isEditing = ref(false)
+const editingText = ref("")
+let index = ref(props.todo.index)
 
   const stopEditing = () => {
     editingText.value = ""
@@ -49,6 +52,11 @@ const props = defineProps<{
 
   const editTodo = () => {
     isEditing.value = true;
+  }
+
+  const changeIndex = () => {
+    store.commit('editIndex', {newIndex: index.value, prevIndex: props.todo.index})
+    index = ref(props.todo.index)
   }
 </script>
 

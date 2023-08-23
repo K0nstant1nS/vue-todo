@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <input type="text" v-model="text">
+    <input class="create-input" type="text" v-model="text">
     <TodoControllButton additional-class="todo__controll-button-to-create_type_absolute" :img-src="saveImage" size="big" :on-click="submit" v-if="text.length > 0"></TodoControllButton>
   </div>
 </template>
@@ -26,7 +26,7 @@ import { ref } from 'vue';
     height: 50px;
   }
 
-  input{
+  .create-input{
     height: 100%;
     font-size: 24px;
     padding-left: 10px;
