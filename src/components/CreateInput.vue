@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <input class="create-input" type="text" v-model="text">
+    <input @keydown.enter="submit" class="create-input" type="text" v-model="text">
     <TodoControllButton additional-class="todo__controll-button-to-create_type_absolute" :img-src="saveImage" size="big" :on-click="submit" v-if="text.length > 0"></TodoControllButton>
   </div>
 </template>
@@ -12,6 +12,9 @@ import { ref } from 'vue';
   import saveImage from "../imgs/icons8-save-30.png";
   let text = ref("")
   const submit = () => {
+    if(!text.value){
+      return
+    }
     store.commit('addPost', text.value)
     text.value = ""
   }

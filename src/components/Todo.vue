@@ -1,6 +1,6 @@
 <template>
   <li v-if="isEditing" class="todo">
-    <input class="create-input" v-model="editingText"/>
+    <input @keydown.enter="postTodo" ref="inputRef"  @keydown.esc="stopEditing" class="create-input" v-model="editingText"/>
       <TodoControllButton additional-class="todo__controll-button-to-edit_type_absolute" :img-src="saveImage" size="small" v-if="editingText" :on-click="postTodo"></TodoControllButton>
       <TodoControllButton additional-class="todo__controll-button-to-remove_type_absolute" :on-click="stopEditing" :img-src="closeImage"></TodoControllButton>
     </li>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onUpdated, type Ref } from 'vue';
 import TodoControllButton from './TodoControllButton.vue';
 import editImage from '../imgs/icons8-edit-30.png'
 import removeImage from "../imgs/icons8-remove-30.png"
@@ -29,6 +29,7 @@ const props = defineProps<{
   }
 }>()
 
+const inputRef: Ref<null| HTMLInputElement> = ref(null)
 const isEditing = ref(false)
 const editingText = ref("")
 let index = ref(props.todo.index)
@@ -39,6 +40,10 @@ let index = ref(props.todo.index)
   }
 
   const postTodo = () => {
+    if(!editingText.value){
+      return
+    }
+    
     store.commit('editPost', {
       index: props.todo.index,
       text: editingText.value
@@ -58,6 +63,12 @@ let index = ref(props.todo.index)
     store.commit('editIndex', {newIndex: index.value, prevIndex: props.todo.index})
     index = ref(props.todo.index)
   }
+
+  onUpdated(()=>{
+  if(inputRef.value){
+    inputRef.value.focus()
+  }
+})
 </script>
 
 <style>

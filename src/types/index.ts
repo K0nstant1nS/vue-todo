@@ -1,3 +1,7 @@
+export interface IState {
+  todos: Array<ITodo>
+}
+
 export interface ITodo {
   index: number,
   text: string

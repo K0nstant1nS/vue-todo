@@ -1,21 +1,21 @@
-import type { IIndexesToSwap, ITodo } from "@/types"
+import type { IIndexesToSwap, IState, ITodo } from "@/types"
 import { sortArr, swapToBottom, swapToTop } from "@/utils"
 
 const mutations = {
-  addPost(state, text){
+  addPost(state: IState, text: string){
     const post = {
       text,
       index: state.todos[state.todos.length - 1].index + 1
     }
     state.todos.push(post)
   },
-  removePost(state, index){
+  removePost(state: IState, index: string){
     const filtered = state.todos.filter((item: any) => {
       return item.index !== index
     })
     state.todos = sortArr(filtered)
   },
-  editPost(state, post){
+  editPost(state: IState, post: ITodo){
     state.todos = state.todos.map((item: any) => {
       if(item.index === post.index){
         return post
@@ -23,7 +23,7 @@ const mutations = {
       return item
     })
   },
-  /*editIndex(state: any, indexes: IIndexesToSwap){  // Версия для обмена местами
+  /*editIndex(state: any, indexes: IIndexesToSwap){  // Версия для обмена местами при изменении индекса
     const { prevIndex, newIndex } = indexes;
     if(newIndex > state.todos.length){
       return
@@ -42,7 +42,7 @@ const mutations = {
     })
     console.log(state.todos)
   }*/
-  editIndex(state: any, indexes: IIndexesToSwap){  // Версия смещения
+  editIndex(state: IState, indexes: IIndexesToSwap){  // Версия для смещения при изменении индекса
     if(indexes.newIndex > state.todos.length){
       return
     }
